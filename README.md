@@ -25,6 +25,11 @@ defmacroでは、コンパイルを挟んだ場合に、全てのモジュール
 この生成したsymbolが衝突する可能性が一応ある。
 
 
+## Install
+
+- https://clojars.org/uvarse
+
+
 ## Glossary
 
 - uvarse
