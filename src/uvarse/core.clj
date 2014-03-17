@@ -17,6 +17,19 @@
               (get u# '~uvarse-sym)
               (throw (ex-info "must be after load-all-uvarse!" {}))))))
 
+(defn- encode-ns-name [ns-name-str]
+  (if ns-name-str
+    (clojure.string/escape ns-name-str {\- "-0", \. "-1"})
+    ""))
+
+(defn- decode-ns-name [encoded-ns-name-str]
+  (if (empty? encoded-ns-name-str)
+    nil
+    (clojure.string/replace encoded-ns-name-str
+                            #"\-(.)"
+                            (fn [[_ x]]
+                              ({"0" "-", "1" "."} x)))))
+
 (defmacro defuvar [uvarse-sym uvar-key uvar-val]
   (assert (not @uvarses) "must be before (load-all-uvarse!)")
   (assert (symbol? uvarse-sym))
@@ -24,7 +37,7 @@
   (assert (keyword? uvar-key))
   (let [sym (symbol (str (name uvarse-sym)
                          uvar-infix-str 
-                         (namespace uvar-key)
+                         (encoded-ns-name-str (namespace uvar-key))
                          uvar-infix-str 
                          (name uvar-key)))]
     (assert (not (resolve sym))
@@ -39,7 +52,7 @@
   (assert (keyword? uvar-key))
   (let [sym (symbol (str (name uvarse-sym)
                          uvar-infix-str 
-                         (namespace uvar-key)
+                         (encoded-ns-name-str (namespace uvar-key))
                          uvar-infix-str 
                          (name uvar-key)
                          uvar-infix-str 
@@ -55,10 +68,7 @@
                 (if (= 1 (count splitted))
                   seed
                   (let [uvarse-name (symbol (first splitted))
-                        uvar-key-ns (second splitted)
-                        uvar-key (keyword (if (empty? uvar-key-ns)
-                                            nil
-                                            uvar-key-ns)
+                        uvar-key (keyword (decode-ns-name (second splitted))
                                           (nth splitted 2 nil))
                         append-mode? (nth splitted 3 nil)
                         old-uvarse (or (get seed uvarse-name) {})
