@@ -4,7 +4,7 @@
 
 (def uvarses (atom nil))
 
-(def ^:const uvar-infix-str "-+*UVAR00*+-") ; must be safe from var namespace
+(def ^:const uvar-infix-str "-+*UVAR01*+-") ; must be safe from var namespace
 (def ^:const uvar-infix-re
   (re-pattern (java.util.regex.Pattern/quote uvar-infix-str)))
 
@@ -24,6 +24,8 @@
   (assert (keyword? uvar-key))
   (let [sym (symbol (str (name uvarse-sym)
                          uvar-infix-str 
+                         (namespace uvar-key)
+                         uvar-infix-str 
                          (name uvar-key)))]
     (assert (not (resolve sym))
             (format "already defined (defuvar %s %s ...)"
@@ -36,6 +38,8 @@
   (assert (resolve uvarse-sym) "must be after defuvarse")
   (assert (keyword? uvar-key))
   (let [sym (symbol (str (name uvarse-sym)
+                         uvar-infix-str 
+                         (namespace uvar-key)
                          uvar-infix-str 
                          (name uvar-key)
                          uvar-infix-str 
@@ -51,8 +55,12 @@
                 (if (= 1 (count splitted))
                   seed
                   (let [uvarse-name (symbol (first splitted))
-                        uvar-key (keyword (second splitted))
-                        append-mode? (nth splitted 2 nil)
+                        uvar-key-ns (second splitted)
+                        uvar-key (keyword (if (empty? uvar-key-ns)
+                                            nil
+                                            uvar-key-ns)
+                                          (nth splitted 2 nil))
+                        append-mode? (nth splitted 3 nil)
                         old-uvarse (or (get seed uvarse-name) {})
                         a-val (var-get a-var)
                         uvar-val (if append-mode?
