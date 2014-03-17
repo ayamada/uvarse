@@ -37,7 +37,7 @@
   (assert (keyword? uvar-key))
   (let [sym (symbol (str (name uvarse-sym)
                          uvar-infix-str 
-                         (encoded-ns-name-str (namespace uvar-key))
+                         (encode-ns-name (namespace uvar-key))
                          uvar-infix-str 
                          (name uvar-key)))]
     (assert (not (resolve sym))
@@ -52,7 +52,7 @@
   (assert (keyword? uvar-key))
   (let [sym (symbol (str (name uvarse-sym)
                          uvar-infix-str 
-                         (encoded-ns-name-str (namespace uvar-key))
+                         (encode-ns-name (namespace uvar-key))
                          uvar-infix-str 
                          (name uvar-key)
                          uvar-infix-str 
