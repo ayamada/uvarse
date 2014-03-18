@@ -82,6 +82,15 @@ alpha版の`load-all-uvarse-on-compile-time!`方式とがある。
 - ドキュメントの英語化
 
 
+## ChangeLog
+
+- 0.1.1 (2014-03-19)
+    - Add `loaded?` function
+
+- 0.1.0 (2014-03-18)
+    - Initial release
+
+
 ## License
 
 Copyright c 2014 ayamada
