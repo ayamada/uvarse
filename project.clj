@@ -1,4 +1,4 @@
-(defproject uvarse "0.1.0"
+(defproject uvarse "0.1.1-SNAPSHOT"
   :description "universal var"
   :url "https://github.com/ayamada/uvarse"
   :license {:name "Eclipse Public License"
