@@ -82,6 +82,9 @@
             (mapcat ns-interns (all-ns)))]
     (reset! uvarses r)))
 
+(defn loaded? []
+  (not (nil? @uvarses)))
+
 ;;; ----------------------------------------------------------------
 
 
